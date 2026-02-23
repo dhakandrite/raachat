@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TransitSnapshot",
+  "type": "object",
+  "required": ["date", "positions", "highlights"],
+  "properties": {
+    "date": {"type": "string", "format": "date"},
+    "positions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["planet_name", "sidereal_longitude", "sign", "house_from_lagna", "house_from_moon"],
+        "properties": {
+          "planet_name": {"type": "string"},
+          "sidereal_longitude": {"type": "number"},
+          "sign": {"type": "string"},
+          "house_from_lagna": {"type": "integer"},
+          "house_from_moon": {"type": "integer"}
+        }
+      }
+    },
+    "highlights": {"type": "array", "items": {"type": "string"}}
+  }
+}

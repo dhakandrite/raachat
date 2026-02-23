@@ -1,0 +1,5 @@
+typer>=0.12.3
+pydantic>=2.7.0
+PyYAML>=6.0.1
+gpt4all>=2.7.0
+pyswisseph>=2.10.3.2

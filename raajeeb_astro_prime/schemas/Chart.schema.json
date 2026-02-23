@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Chart",
+  "type": "object",
+  "required": ["id", "name", "birth_details", "lagna_sign", "moon_sign", "sun_sign", "planet_positions"],
+  "properties": {
+    "id": {"type": "string"},
+    "name": {"type": "string"},
+    "birth_details": {"$ref": "#/definitions/BirthDetails"},
+    "lagna_sign": {"type": "string"},
+    "moon_sign": {"type": "string"},
+    "sun_sign": {"type": "string"},
+    "planet_positions": {"type": "array", "items": {"$ref": "#/definitions/PlanetPosition"}}
+  },
+  "definitions": {
+    "BirthDetails": {
+      "type": "object",
+      "required": ["date_of_birth", "time_of_birth", "timezone", "latitude", "longitude"],
+      "properties": {
+        "date_of_birth": {"type": "string", "format": "date"},
+        "time_of_birth": {"type": "string"},
+        "timezone": {"type": "string"},
+        "latitude": {"type": "number"},
+        "longitude": {"type": "number"},
+        "gender": {"type": ["string", "null"]},
+        "notes": {"type": ["string", "null"]}
+      }
+    },
+    "PlanetPosition": {
+      "type": "object",
+      "required": ["planet_name", "sidereal_longitude", "sign", "house", "nakshatra_name", "nakshatra_pada"],
+      "properties": {
+        "planet_name": {"type": "string"},
+        "sidereal_longitude": {"type": "number", "minimum": 0, "exclusiveMaximum": 360},
+        "sign": {"type": "string"},
+        "house": {"type": "integer", "minimum": 1, "maximum": 12},
+        "nakshatra_name": {"type": "string"},
+        "nakshatra_pada": {"type": "integer", "minimum": 1, "maximum": 4},
+        "speed": {"type": ["number", "null"]}
+      }
+    }
+  }
+}

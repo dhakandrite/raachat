@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "raajeeb-astroalchemy-prime"
+version = "2.0.0"
+description = "Local offline Vedic astrology assistant for Windows"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Ashwini Astrology"}]
+license = {text = "MIT"}
+dependencies = [
+  "typer>=0.12.3",
+  "pydantic>=2.7.0",
+  "PyYAML>=6.0.1"
+]
+
+[project.scripts]
+astro = "raajeeb_astro_prime.main:app"

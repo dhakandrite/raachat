@@ -19,21 +19,33 @@ A fully local, offline-first Vedic astrology assistant for Windows 10/11. It use
    ```powershell
    venv\Scripts\activate
    ```
-5. Install dependencies:
+5. Install base dependencies:
    ```powershell
    pip install -r requirements.txt
    ```
-6. Run:
+6. (Optional) Install local LLM + Swiss Ephemeris extras:
+   ```powershell
+   pip install -r requirements-optional.txt
+   ```
+7. Run:
    ```powershell
    python -m raajeeb_astro_prime.main --help
    ```
    or double-click `run_astro_prime.bat`.
+
+## Deploy / Runbook (Local Offline)
+For a predictable local deployment, run:
+```powershell
+python -m raajeeb_astro_prime.main health
+```
+This reports profile-store path, CSV ephemeris availability, Swiss Ephemeris availability, and whether GPT4All is available or template-only mode is active.
 
 ## Swiss Ephemeris Note
 If using `pyswisseph`, place Swiss ephemeris data files in the expected local path for your environment if needed. Otherwise CSV fallback in `raajeeb_astro_prime/data/ephemeris.csv` is used.
 
 ## CLI Commands
 ```bash
+astro health
 astro profile create
 astro profile list
 astro chart summary --profile "Name"

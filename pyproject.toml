@@ -18,3 +18,15 @@ dependencies = [
 
 [project.scripts]
 astro = "raajeeb_astro_prime.main:app"
+
+[project.optional-dependencies]
+local-llm = [
+  "gpt4all>=2.7.0"
+]
+swiss = [
+  "pyswisseph>=2.10.3.2"
+]
+full = [
+  "gpt4all>=2.7.0",
+  "pyswisseph>=2.10.3.2"
+]

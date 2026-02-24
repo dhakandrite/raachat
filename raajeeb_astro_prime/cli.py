@@ -319,6 +319,25 @@ def chat() -> None:
         typer.echo(f"astro> {response}")
 
 
+@app.command("health")
+def health() -> None:
+    """Show local deployment health and optional backend availability."""
+    settings = get_settings()
+    typer.echo("Astro Logic Prime health check")
+    typer.echo(f"- Profile store: {settings.profile_store}")
+    typer.echo(f"- Ephemeris CSV exists: {settings.ephemeris_csv.exists()}")
+
+    try:
+        import swisseph  # type: ignore  # noqa: F401
+
+        typer.echo("- Swiss Ephemeris backend: available")
+    except Exception:
+        typer.echo("- Swiss Ephemeris backend: unavailable (CSV fallback will be used)")
+
+    llm = GPT4AllClient(settings.gpt4all_model_name, str(settings.gpt4all_model_path))
+    typer.echo(f"- GPT4All: {'available' if llm.available else 'template-only mode'}")
+
+
 @app.command("schema")
 def schema(out_dir: str = typer.Option("raajeeb_astro_prime/schemas", "--out-dir")) -> None:
     """Export JSON schemas for core models."""

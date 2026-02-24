@@ -1,0 +1,4 @@
+# Optional local acceleration/features
+# Install only if you need these enhancements.
+gpt4all>=2.7.0
+pyswisseph>=2.10.3.2

@@ -33,6 +33,16 @@ A fully local, offline-first Vedic astrology assistant for Windows 10/11. It use
    ```
    or double-click `run_astro_prime.bat`.
 
+
+## Best Offline LLM Option (Recommended)
+If you have multiple local AI platforms (Ollama, LM Studio, VS Code extensions), the **best option for this project right now is GPT4All or template mode** because this app is designed as an offline local CLI and does not require a background server.
+
+- `llm_mode = "auto"` (default): try GPT4All, fallback to template mode.
+- `llm_mode = "gpt4all"`: force GPT4All (falls back with warning if unavailable).
+- `llm_mode = "template"`: fully deterministic text generation with no model dependency.
+
+You can set this in `raajeeb_astro_prime/config/settings.py` under `AppSettings.llm_mode`.
+
 ## Deploy / Runbook (Local Offline)
 For a predictable local deployment, run:
 ```powershell

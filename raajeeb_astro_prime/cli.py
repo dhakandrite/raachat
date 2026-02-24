@@ -273,7 +273,11 @@ def chat() -> None:
     settings = get_settings()
     store = ProfileStore(settings.profile_store)
     persona = _load_persona_prompt(settings.persona_prompt_file)
-    llm = GPT4AllClient(settings.gpt4all_model_name, str(settings.gpt4all_model_path))
+    llm = None
+    if settings.llm_mode in {"auto", "gpt4all"}:
+        llm = GPT4AllClient(settings.gpt4all_model_name, str(settings.gpt4all_model_path))
+        if settings.llm_mode == "gpt4all" and not llm.available:
+            typer.echo("GPT4All mode requested but unavailable. Falling back to template mode.")
     disclaimer_sent: set[str] = set()
 
     typer.echo("Astro chat ready. Type 'exit' to stop.")
@@ -323,7 +327,7 @@ def chat() -> None:
                     store.upsert(b)
                 response = render_compatibility(compute_ashta_kuta(a.chart, b.chart))
 
-        if llm.available:
+        if llm and llm.available:
             try:
                 response = llm.generate_response(persona, [{"role": "user", "content": f"Question: {question}\nAnalysis: {response}"}])
             except Exception as exc:
@@ -344,6 +348,7 @@ def health() -> None:
     typer.echo("Astro Logic Prime health check")
     typer.echo(f"- Profile store: {settings.profile_store}")
     typer.echo(f"- Ephemeris CSV exists: {settings.ephemeris_csv.exists()}")
+    typer.echo(f"- LLM mode setting: {settings.llm_mode}")
 
     try:
         import swisseph  # type: ignore  # noqa: F401

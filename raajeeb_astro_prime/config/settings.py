@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from pydantic import BaseModel, Field
+from typing import Literal
 
 
 class AppSettings(BaseModel):
@@ -23,6 +24,7 @@ class AppSettings(BaseModel):
     persona_prompt_file: Path = Field(
         default_factory=lambda: Path("raajeeb_astro_prime/config/persona_system_prompt.txt")
     )
+    llm_mode: Literal["auto", "gpt4all", "template"] = "auto"
     gpt4all_model_name: str = "Phi-3-mini-4k-instruct.Q4_0.gguf"
     gpt4all_model_path: Path = Field(default_factory=lambda: Path("models"))
 

@@ -6,7 +6,7 @@ import json
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+from typing import Literal, Optional
 
 import typer
 
@@ -166,8 +166,13 @@ def dasha_timeline(
     profile: str = typer.Option(..., "--profile"),
     from_date: str = typer.Option(..., "--from"),
     to_date: str = typer.Option(..., "--to"),
+    level: Literal["all", "maha", "antar", "pratyantar"] = typer.Option(
+        "all",
+        "--level",
+        help="Filter output by dasha level.",
+    ),
 ) -> None:
-    """Show Vimshottari dasha rows between date range."""
+    """Show Vimshottari periods between date range with optional level filtering."""
     store = ProfileStore(get_settings().profile_store)
     prof = store.get_by_name(profile)
     if prof.chart is None:
@@ -179,16 +184,29 @@ def dasha_timeline(
     birth_utc = to_utc_datetime(str(prof.birth_details.date_of_birth), prof.birth_details.time_of_birth.isoformat(), prof.birth_details.timezone)
     periods = build_vimshottari_periods(start_lord, birth_utc)
 
-    f = datetime.strptime(from_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
-    t = datetime.strptime(to_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    try:
+        f = datetime.strptime(from_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        t = datetime.strptime(to_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    except ValueError as exc:
+        raise typer.BadParameter("Dates must use YYYY-MM-DD format.") from exc
+
+    if f > t:
+        raise typer.BadParameter("--from must be earlier than or equal to --to.")
+
+    shown = 0
     for period in periods:
+        if level != "all" and period.level != level:
+            continue
         if period.start_datetime <= t and period.end_datetime >= f:
+            shown += 1
             typer.echo(f"{period.level:10} {period.lord:8} {period.start_datetime.date()} -> {period.end_datetime.date()}")
+    if shown == 0:
+        typer.echo("No dasha periods found in the selected range.")
 
 
 @dasha_app.command("now")
 def dasha_now(profile: str = typer.Option(..., "--profile"), on: Optional[str] = typer.Option(None, "--on")) -> None:
-    """Show running Mahadasha and Antardasha for date."""
+    """Show running Mahadasha, Antardasha, and Pratyantardasha for date."""
     store = ProfileStore(get_settings().profile_store)
     prof = store.get_by_name(profile)
     if prof.chart is None:

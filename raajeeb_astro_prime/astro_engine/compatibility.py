@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from raajeeb_astro_prime.astro_engine.vedic_calculations import NAKSHATRAS, SIGNS
-from raajeeb_astro_prime.models.astro_core import Chart
+from raajeeb_astro_prime.models.astro_core import Chart, PlanetPosition
 from raajeeb_astro_prime.models.compatibility import CompatibilityResult
 
 KUTA_MAX = {
@@ -94,11 +94,13 @@ YONI_GROUPS = [
 ]
 
 
-def _moon_position(chart: Chart):
+def _moon_position(chart: Chart) -> PlanetPosition:
+    """Return Moon position for a chart."""
     return next(p for p in chart.planet_positions if p.planet_name == "Moon")
 
 
 def _sign_distance(sign_a: str, sign_b: str) -> int:
+    """Return sign distance from sign_a to sign_b in inclusive 1..12 steps."""
     a = SIGNS.index(sign_a)
     b = SIGNS.index(sign_b)
     return ((b - a) % 12) + 1
